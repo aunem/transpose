@@ -1,0 +1,47 @@
+
+syntax = "proto3";
+
+package transpose;
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+
+option go_package = "github.com/aunem/transpose/sdk/go/transpose";
+
+service Transpose {
+
+    rpc GetConfig(Empty) returns (Config) {
+        option (google.api.http) = {
+            get: "/config"
+        }; 
+    }
+
+    rpc PutConfig(Config) returns (Config) {
+        option (google.api.http) = {
+            put: "/config"
+            body: "*"
+        }; 
+    }
+
+    rpc GetStats(Empty) returns (Stats) {
+        option (google.api.http) = {
+            get: "/stats"
+        }; 
+    }
+}
+
+message Config {
+    bool debug = 1;
+    Listener listener = 2;
+}
+
+message Listener {
+    string name = 1;
+    string package = 2;
+    google.protobuf.Any spec = 3;
+}
+
+message Stats {
+    bytes body = 1;
+}
+
+message Empty {}

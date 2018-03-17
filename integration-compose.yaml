@@ -1,0 +1,32 @@
+version: '3'
+services:
+  transpose:
+    build:
+      context: ./
+      dockerfile: Dockerfile-integration
+    command: go run main.go
+    links: 
+      - test-client
+    working_dir: /go/src/github.com/aunem/transpose
+    volumes:
+      - "./:/go/src/github.com/aunem/transpose"
+    expose:
+      - "80"
+  test-server:
+    build:
+      context: ./
+      dockerfile: Dockerfile-integration
+    command: go run integration/server/main.go
+    links: 
+      - transpose
+    working_dir: /go/src/github.com/aunem/transpose
+    volumes:
+      - "./:/go/src/github.com/aunem/transpose"
+  test-client:
+    build:
+      context: ./
+      dockerfile: Dockerfile-integration
+    command: go run integration/client/main.go
+    working_dir: /go/src/github.com/aunem/transpose
+    volumes:
+      - "./:/go/src/github.com/aunem/transpose"

@@ -1,0 +1,37 @@
+apiVersion: alpha.oscea.com/v1
+Kind: Transpose
+Metadata:
+  name: myProxy
+  namespace: default
+spec:
+  debug: true
+
+  listener:
+    name: mylistener
+    package: github.com/oscea/transpose-plugins/listener/http
+    spec: 
+      port: 80
+      ssl: false
+
+  middleware:
+    request:
+    - name: myplugin
+      package: github.com/oscea/transpose-plugins/middleware/auth
+      spec:
+        authUrl: my.auth.com
+    response:
+    - name: myplugin
+      package: github.com/oscea/transpose-plugins/middleware/auth
+      spec:
+        authUrl: my.auth.com
+        auditUrl: my.audit.com
+
+  roundtrip:
+    name: myroundtrip
+    package: github.com/oscea/transpose-plugins/roundtrip/supermux
+    spec:
+      http:
+      - path: "/"
+        backend:
+          serviceName: myservice
+          servicePort: 80
