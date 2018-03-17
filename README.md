@@ -30,9 +30,12 @@ Transpose is a cloud native composable proxy with a focus on Kubernetes written 
 
 ## Roadmap
 
-[ ] Middleware plugins   
-[ ] Roundtrip plugins   
-[ ] HTTP/2   
-[ ] GRPC   
-[ ] Data plane    
-[ ] Egress plugins   
+- [ ] Middleware plugins   
+- [ ] Roundtrip plugins   
+- [ ] Listener plugins
+- [ ] HTTP/2   
+- [ ] GRPC   
+- [ ] Data plane    
+- [ ] Egress plugins   
+
+## Developing
