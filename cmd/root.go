@@ -25,11 +25,10 @@ var rootCmd = &cobra.Command{
 
 func init() {
 	cobra.OnInitialize(initConfig)
-	rootCmd.PersistentFlags().StringVarP(&name, "config-name", "n", "", "name of the kubernetes config to sync to")
-	rootCmd.PersistentFlags().StringVarP(&namespace, "config-namespace", "s", "local", "namespace of the kubernetes config to sync to, use 'local' for a local config")
+	rootCmd.PersistentFlags().StringVar(&name, "config-name", "", "name of the kubernetes config to sync to")
+	rootCmd.PersistentFlags().StringVar(&namespace, "config-namespace", "local", "namespace of the kubernetes config to sync to, use 'local' for a local config")
 	viper.BindPFlag("config-name", rootCmd.PersistentFlags().Lookup("config-name"))
 	viper.BindPFlag("config-namespace", rootCmd.PersistentFlags().Lookup("config-namespace"))
-	viper.SetDefault("author", "NAME HERE <EMAIL ADDRESS>")
 }
 
 func initConfig() {
@@ -43,7 +42,7 @@ func initConfig() {
 	if err != nil {
 		log.Fatalf("could not load config: %+v", err)
 	}
-	log.Info("loaded config: %+v", conf)
+	log.Infof("loaded config: %+v", conf)
 }
 
 // Execute is the root cobra command

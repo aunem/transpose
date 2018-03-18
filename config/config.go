@@ -12,12 +12,11 @@ import (
 
 // LoadConfig loads the main config from k8s or local
 func LoadConfig(name, namespace string) (o *Transpose, err error) {
-	log.Infof("loading config with name: %s and namespace: %s", name, namespace)
+	log.Debugf("loading config with name: %s and namespace: %s", name, namespace)
 	if namespace == "local" {
-		log.Info("using local config")
 		o, err = loadLocal()
 	} else {
-		log.Info("connecting to k8s")
+		log.Debug("connecting to k8s")
 		client, err := k8s.NewInClusterClient()
 		if err != nil {
 			log.Infof("could not connect to k8s: %v, using local config...", err)
@@ -34,14 +33,14 @@ func LoadConfig(name, namespace string) (o *Transpose, err error) {
 }
 
 func loadK8s(cli *k8s.Client, name, namespace string) (*Transpose, error) {
-	log.Info("loading k8s config")
+	log.Debug("loading k8s config")
 	var o Transpose
 	err := cli.Get(context.Background(), namespace, name, &o)
 	return &o, err
 }
 
 func loadLocal() (*Transpose, error) {
-	log.Info("loading local config")
+	log.Debug("loading local config")
 	data, err := ioutil.ReadFile("./config.yaml")
 	if err != nil {
 		return nil, err

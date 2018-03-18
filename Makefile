@@ -1,4 +1,10 @@
 
+.PHONY: deps
+deps:
+	docker-compose run --rm deps
+
+.PHONY: build
+	docker-compose run -rm build
 
 .PHONY: integration
 integration:
@@ -8,24 +14,24 @@ integration:
 integration-down:
 	docker-compose -f integration-compose.yaml down
 
-.PHONY: gateway
-gateway: 
+.PHONY: proto-gateway
+proto-gateway: 
 	protoc -I/usr/local/include -I. \
 	-I$(GOPATH)/src \
 	-I$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
 	--grpc-gateway_out=logtostderr=true:. \
 	api/transpose.proto
 
-.PHONY: swagger
-swagger:
+.PHONY: proto-swagger
+proto-swagger:
 	protoc -I/usr/local/include -I. \
 	-I$(GOPATH)/src \
 	-I$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
 	--swagger_out=logtostderr=true:. \
 	api/transpose.proto
 
-.PHONY: client
-client:
+.PHONY: proto-client
+proto-client:
 	protoc -I/usr/local/include -I. \
 	-I$(GOPATH)/src \
 	-I$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
@@ -40,4 +46,4 @@ proto:
 	--go_out=plugins=grpc:$(GOPATH)/src \
 	api/transpose.proto
 
-generate: proto gateway swagger client
+gen-proto: proto proto-gateway proto-swagger proto-client

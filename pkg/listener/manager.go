@@ -37,11 +37,11 @@ func NewManager(c *config.Transpose) (*Manager, error) {
 	m := Manager{
 		Listener: Listener{},
 	}
-	rtp, err := loadListener(files, c.Listener)
+	rtp, err := loadListener(files, c.Spec.Listener)
 	if err != nil {
 		return nil, err
 	}
-	m.Listener = Listener{Plugin: rtp, Config: c.Listener.Spec}
+	m.Listener = Listener{Plugin: rtp, Config: c.Spec.Listener.Spec}
 	log.Debugf("manager: %+v", m)
 	return &m, nil
 }

@@ -7,13 +7,18 @@ import (
 
 // Transpose represnts a configuration for an transpose instance or instances
 type Transpose struct {
-	Metadata   *metav1.ObjectMeta `json:"metadata"`
-	Debug      bool               `json:"debug" yaml:"debug"`
-	SSL        bool               `json:"ssl" yaml:"ssl"`
-	Port       string             `json:"port" yaml:"port"`
-	Listener   ListenerPlugin     `json:"listener" yaml:"listener"`
-	Middleware MiddlewarePlugins  `json:"middleware" yaml:"middleware"`
-	Roundtrip  RoundtripPlugin    `json:"roundtrip" yaml:"roundtrip"`
+	Metadata *metav1.ObjectMeta `json:"metadata" yaml:"metadata"`
+	Spec     TransposeSpec      `json:"spec" yaml:"spec"`
+}
+
+// TransposeSpec holds the specification for the proxy
+type TransposeSpec struct {
+	Debug      bool              `json:"debug" yaml:"debug"`
+	SSL        bool              `json:"ssl" yaml:"ssl"`
+	Port       string            `json:"port" yaml:"port"`
+	Listener   ListenerPlugin    `json:"listener" yaml:"listener"`
+	Middleware MiddlewarePlugins `json:"middleware" yaml:"middleware"`
+	Roundtrip  RoundtripPlugin   `json:"roundtrip" yaml:"roundtrip"`
 }
 
 // ListenerPlugin holds the configuration for the listener plugin

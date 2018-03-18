@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"log"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/aunem/transpose/pkg/listener"
 	"github.com/aunem/transpose/utils"
@@ -21,6 +21,7 @@ var serverCmd = &cobra.Command{
 
 // Serve starts a new transpose server
 func Serve(cmd *cobra.Command, args []string) {
+	log.Infof("starting server...")
 	m, err := listener.NewManager(conf)
 	if err != nil {
 		log.Fatalf("problem creating listener manager: %+v", err)

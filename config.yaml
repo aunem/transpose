@@ -1,6 +1,6 @@
 apiVersion: alpha.oscea.com/v1
-Kind: Transpose
-Metadata:
+kind: Transpose
+metadata:
   name: myProxy
   namespace: default
 spec:
