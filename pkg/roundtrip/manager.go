@@ -28,7 +28,7 @@ type Roundtrip struct {
 }
 
 // NewManager returns a new Roundtrip manager
-func NewManager(c *config.Transpose) (*Manager, error) {
+func NewManager(spec config.TransposeSpec) (*Manager, error) {
 	files, err := ioutil.ReadDir(Dir)
 	if err != nil {
 		return nil, err
@@ -37,11 +37,11 @@ func NewManager(c *config.Transpose) (*Manager, error) {
 	m := Manager{
 		Roundtrip: Roundtrip{},
 	}
-	rtp, err := loadRoundtrip(files, c.Spec.Roundtrip)
+	rtp, err := loadRoundtrip(files, spec.Roundtrip)
 	if err != nil {
 		return nil, err
 	}
-	m.Roundtrip = Roundtrip{Plugin: rtp, Config: c.Spec.Roundtrip.Spec}
+	m.Roundtrip = Roundtrip{Plugin: rtp, Config: spec.Roundtrip.Spec}
 	log.Debugf("manager: %+v", m)
 	return &m, nil
 }

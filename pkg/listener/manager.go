@@ -29,7 +29,7 @@ type Listener struct {
 }
 
 // NewManager returns a new Listener manager
-func NewManager(c *config.Transpose) (*Manager, error) {
+func NewManager(spec config.TransposeSpec) (*Manager, error) {
 	files, err := ioutil.ReadDir(Dir)
 	if err != nil {
 		return nil, err
@@ -38,12 +38,12 @@ func NewManager(c *config.Transpose) (*Manager, error) {
 	m := Manager{
 		Listener: Listener{},
 	}
-	rtp, err := loadListener(files, c.Spec.Listener)
+	rtp, err := loadListener(files, spec.Listener)
 	if err != nil {
 		return nil, err
 	}
-	m.Listener = Listener{Plugin: rtp, Spec: c.Spec}
-	m.Spec = c.Spec
+	m.Listener = Listener{Plugin: rtp, Spec: spec}
+	m.Spec = spec
 	log.Debugf("manager: %+v", m)
 	return &m, nil
 }

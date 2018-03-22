@@ -29,7 +29,7 @@ type Middleware struct {
 }
 
 // NewManager returns a new middleware manager
-func NewManager(c *config.Transpose) (*Manager, error) {
+func NewManager(spec config.TransposeSpec) (*Manager, error) {
 	files, err := ioutil.ReadDir(Dir)
 	if err != nil {
 		return nil, err
@@ -39,14 +39,14 @@ func NewManager(c *config.Transpose) (*Manager, error) {
 		RequestMiddlewares:  []Middleware{},
 		ResponseMiddlewares: []Middleware{},
 	}
-	for _, plugin := range c.Spec.Middleware.Request {
+	for _, plugin := range spec.Middleware.Request {
 		mw, err := loadMiddleware(files, plugin)
 		if err != nil {
 			return nil, err
 		}
 		m.RequestMiddlewares = append(m.RequestMiddlewares, mw)
 	}
-	for _, plugin := range c.Spec.Middleware.Response {
+	for _, plugin := range spec.Middleware.Response {
 		mw, err := loadMiddleware(files, plugin)
 		if err != nil {
 			return nil, err
