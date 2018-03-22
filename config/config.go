@@ -34,6 +34,9 @@ func LoadConfig(name, namespace string) (o *Transpose, err error) {
 
 func loadK8s(cli *k8s.Client, name, namespace string) (*Transpose, error) {
 	log.Debug("loading k8s config")
+	if namespace == "" {
+		namespace = cli.Namespace
+	}
 	var o Transpose
 	err := cli.Get(context.Background(), namespace, name, &o)
 	return &o, err

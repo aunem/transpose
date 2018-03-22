@@ -8,7 +8,7 @@ spec:
 
   listener:
     name: mylistener
-    package: github.com/oscea/transpose-plugins/listener/http
+    package: github.com/aunem/transpose-plugins/listener/http
     spec: 
       port: 80
       ssl: false
@@ -16,19 +16,21 @@ spec:
   middleware:
     request:
     - name: myplugin
-      package: github.com/oscea/transpose-plugins/middleware/auth
+      package: github.com/aunem/transpose-plugins/middleware/auth
       spec:
         authUrl: my.auth.com
+        clientID: transposeClient
     response:
     - name: myplugin
       package: github.com/oscea/transpose-plugins/middleware/auth
       spec:
         authUrl: my.auth.com
+        clientID: transposeClient
         auditUrl: my.audit.com
 
   roundtrip:
     name: myroundtrip
-    package: github.com/oscea/transpose-plugins/roundtrip/supermux
+    package: github.com/aunem/transpose-plugins/roundtrip/supermux
     spec:
       http:
       - path: "/"

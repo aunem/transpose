@@ -26,7 +26,7 @@ var rootCmd = &cobra.Command{
 func init() {
 	cobra.OnInitialize(initConfig)
 	rootCmd.PersistentFlags().StringVar(&name, "config-name", "", "name of the kubernetes config to sync to")
-	rootCmd.PersistentFlags().StringVar(&namespace, "config-namespace", "local", "namespace of the kubernetes config to sync to, use 'local' for a local config")
+	rootCmd.PersistentFlags().StringVar(&namespace, "config-namespace", "local", "namespace of the kubernetes config to sync to, use 'local' for a local config, leave blank for current ns")
 	viper.BindPFlag("config-name", rootCmd.PersistentFlags().Lookup("config-name"))
 	viper.BindPFlag("config-namespace", rootCmd.PersistentFlags().Lookup("config-namespace"))
 }
@@ -40,7 +40,16 @@ func initConfig() {
 	namespace := viper.GetString("config-namespace")
 	conf, err = config.LoadConfig(name, namespace)
 	if err != nil {
+		log.Info("setting log level to debug")
 		log.Fatalf("could not load config: %+v", err)
+	}
+	tf := &log.TextFormatter{
+		FullTimestamp:    true,
+		DisableTimestamp: false,
+	}
+	log.SetFormatter(tf)
+	if conf.Spec.Debug {
+		log.SetLevel(log.DebugLevel)
 	}
 	log.Infof("loaded config: %+v", conf)
 }

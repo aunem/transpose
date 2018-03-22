@@ -37,11 +37,11 @@ func NewManager(c *config.Transpose) (*Manager, error) {
 	m := Manager{
 		Roundtrip: Roundtrip{},
 	}
-	rtp, err := loadRoundtrip(files, c.Roundtrip)
+	rtp, err := loadRoundtrip(files, c.Spec.Roundtrip)
 	if err != nil {
 		return nil, err
 	}
-	m.Roundtrip = Roundtrip{Plugin: rtp, Config: c.Roundtrip.Spec}
+	m.Roundtrip = Roundtrip{Plugin: rtp, Config: c.Spec.Roundtrip.Spec}
 	log.Debugf("manager: %+v", m)
 	return &m, nil
 }
@@ -53,7 +53,7 @@ func loadRoundtrip(files []os.FileInfo, plugin config.RoundtripPlugin) (rtp Plug
 		if err != nil {
 			return rtp, err
 		}
-		path, err = resolve.BuildPlugin(plugin.Name, plugin.Package, resolve.RoundtripType)
+		path, err = resolve.BuildPlugin(plugin.Name, path, resolve.RoundtripType)
 		if err != nil {
 			return rtp, err
 		}

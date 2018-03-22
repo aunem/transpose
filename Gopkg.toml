@@ -65,3 +65,7 @@
 # source = "https://github.com/myfork/package.git"
 
 
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/aunem/transpose-plugins"

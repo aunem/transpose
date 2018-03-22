@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  branch = "master"
+  name = "github.com/aunem/transpose-plugins"
+  packages = ["listener/http"]
+  revision = "34cb761f3879f2f1eca25a0e17c5afe9026168d5"
+
+[[projects]]
   name = "github.com/davecgh/go-spew"
   packages = ["spew"]
   revision = "346938d642f2ec3594ed81d874461961cd0faa76"
@@ -264,6 +270,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "5faa29263a9176cb9c7eaac98bb5e51628ef70b2292ea40e00d08c2a6e0ae937"
+  inputs-digest = "4bb79d948cc16a77b20b1265157ee3efb17f8aaf442a8a5ffb0a30a00867e86b"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -1,6 +1,6 @@
 # Transpose
 
-Transpose is a cloud native composable proxy with a focus on Kubernetes written in Go.
+Transpose is a cloud native composable proxy with a focus on kubernetes written in go.
 
 * **NOTE:** Transpose is pre alpha and under heavy development
 
@@ -35,11 +35,14 @@ spec:
       package: github.com/oscea/transpose-plugins/middleware/hydra
       spec:
         authUrl: my.auth.com
+        clientID: transposeClient
     response:
     - name: hydraAuth
       package: github.com/oscea/transpose-plugins/middleware/hydra
       spec:
         authUrl: my.auth.com
+        clientID: transposeClient
+        auditUrl: my.audit.com
 
   roundtrip:
     name: myroundtrip

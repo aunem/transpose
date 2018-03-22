@@ -39,14 +39,14 @@ func NewManager(c *config.Transpose) (*Manager, error) {
 		RequestMiddlewares:  []Middleware{},
 		ResponseMiddlewares: []Middleware{},
 	}
-	for _, plugin := range c.Middleware.Request {
+	for _, plugin := range c.Spec.Middleware.Request {
 		mw, err := loadMiddleware(files, plugin)
 		if err != nil {
 			return nil, err
 		}
 		m.RequestMiddlewares = append(m.RequestMiddlewares, mw)
 	}
-	for _, plugin := range c.Middleware.Response {
+	for _, plugin := range c.Spec.Middleware.Response {
 		mw, err := loadMiddleware(files, plugin)
 		if err != nil {
 			return nil, err
@@ -64,7 +64,7 @@ func loadMiddleware(files []os.FileInfo, plugin config.MiddlewarePlugin) (mw Mid
 		if err != nil {
 			return mw, err
 		}
-		path, err = resolve.BuildPlugin(plugin.Name, plugin.Package, resolve.MiddlewareType)
+		path, err = resolve.BuildPlugin(plugin.Name, path, resolve.MiddlewareType)
 		if err != nil {
 			return mw, err
 		}

@@ -18,13 +18,14 @@ const Dir = "./plugins/listener"
 // Manager manages Listener
 type Manager struct {
 	Listener Listener
+	Spec     config.TransposeSpec
 }
 
 // Listener holds the plugin and variables to be executed
 type Listener struct {
 	Plugin Plugin
 	Vars   map[string]string
-	Config interface{}
+	Spec   interface{}
 }
 
 // NewManager returns a new Listener manager
@@ -41,19 +42,22 @@ func NewManager(c *config.Transpose) (*Manager, error) {
 	if err != nil {
 		return nil, err
 	}
-	m.Listener = Listener{Plugin: rtp, Config: c.Spec.Listener.Spec}
+	m.Listener = Listener{Plugin: rtp, Spec: c.Spec}
+	m.Spec = c.Spec
 	log.Debugf("manager: %+v", m)
 	return &m, nil
 }
 
 func loadListener(files []os.FileInfo, plugin config.ListenerPlugin) (rtp Plugin, err error) {
 	path := soPath(files, plugin)
+	log.Debug(".so file: ", path)
 	if path == "" {
+		log.Debug(".so file not found, resolving plugin...")
 		path, err = resolve.ResolvePlugin(plugin.Name, plugin.Package)
 		if err != nil {
 			return rtp, err
 		}
-		path, err = resolve.BuildPlugin(plugin.Name, plugin.Package, resolve.ListenerType)
+		path, err = resolve.BuildPlugin(plugin.Name, path, resolve.ListenerType)
 		if err != nil {
 			return rtp, err
 		}
@@ -76,6 +80,7 @@ func loadListener(files []os.FileInfo, plugin config.ListenerPlugin) (rtp Plugin
 }
 
 func soPath(fl []os.FileInfo, plugin config.ListenerPlugin) (path string) {
+	log.Debug("checking for .so file...")
 	for _, fileInfo := range fl {
 		if fileInfo.IsDir() {
 			if plugin.Name == fileInfo.Name() {
@@ -92,6 +97,6 @@ func soPath(fl []os.FileInfo, plugin config.ListenerPlugin) (path string) {
 // ExecListener executes the Listener plugin
 func (m *Manager) ExecListener() error {
 	log.Debugf("executing Listener: %+v", m.Listener)
-	err := m.Listener.Plugin.Listen(m.Listener.Config)
+	err := m.Listener.Plugin.Listen(m.Spec)
 	return err
 }

@@ -22,7 +22,7 @@ var serverCmd = &cobra.Command{
 // Serve starts a new transpose server
 func Serve(cmd *cobra.Command, args []string) {
 	log.Infof("starting server...")
-	m, err := listener.NewManager(conf)
+	m, err := listener.NewManager(conf.Spec.Listener.Spec, conf)
 	if err != nil {
 		log.Fatalf("problem creating listener manager: %+v", err)
 	}
