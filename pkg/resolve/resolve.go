@@ -40,7 +40,6 @@ func Update() {
 
 // ExecCommand executes the dep command to resolve the plugin
 func ExecCommand(cmdName string, cmdArgs []string) {
-	log.Debug("start exec...")
 	cmd := exec.Command(cmdName, cmdArgs...)
 	log.Debugf("cmd: %+v", cmd)
 	cmdReader, err := cmd.StdoutPipe()
@@ -67,7 +66,6 @@ func ExecCommand(cmdName string, cmdArgs []string) {
 	if err != nil {
 		log.Fatal("Error waiting for Cmd: ", err)
 	}
-	log.Debug("end exec...")
 }
 
 // ResolvePlugin pulls a remote plugin local
@@ -85,7 +83,7 @@ func BuildPlugin(name, pkgPath string, typ Type) (path string, err error) {
 	log.Debug("building plugin...")
 	soPath := filepath.Join(Dir, string(typ), name, fmt.Sprintf("%s.so", name))
 	cmdName := "go"
-	cmdArgs := []string{"build", "-buildmode=plugin", fmt.Sprintf("-o %s", soPath), pkgPath}
+	cmdArgs := []string{"build", "-buildmode=plugin", "-o", soPath, pkgPath}
 	ExecCommand(cmdName, cmdArgs)
 	return soPath, nil
 }

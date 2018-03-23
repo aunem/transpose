@@ -11,7 +11,7 @@ import (
 
 var cleanCmd = &cobra.Command{
 	Use:   "clean",
-	Short: "clean plugins",
+	Short: "remove all plugin objects from bin directory",
 	Long:  utils.GetArt(),
 	Run:   Clean,
 }
@@ -27,4 +27,5 @@ func Clean(cmd *cobra.Command, args []string) {
 		log.Fatal(err)
 	}
 	utils.MakeBins()
+	log.Info("sucessfully cleaned plugins")
 }

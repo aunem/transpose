@@ -70,7 +70,7 @@ func loadListener(files []os.FileInfo, plugin config.ListenerPlugin) (rtp Plugin
 	if err != nil {
 		return rtp, err
 	}
-
+	log.Debugf("sym plugin: %+v", symPlugin)
 	var ok bool
 	rtp, ok = symPlugin.(Plugin)
 	if !ok {

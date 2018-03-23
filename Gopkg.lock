@@ -5,7 +5,7 @@
   branch = "master"
   name = "github.com/aunem/transpose-plugins"
   packages = ["listener/http"]
-  revision = "01e0df2a105767f26d5ebb1812095c0ddb907d49"
+  revision = "8cb84c570d1ad5912a16d197f371fbbeb2876261"
 
 [[projects]]
   name = "github.com/davecgh/go-spew"
