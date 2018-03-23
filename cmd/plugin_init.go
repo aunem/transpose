@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/aunem/transpose/utils"
+	"github.com/aunem/transpose/pkg/utils"
 	"github.com/spf13/cobra"
 )
 

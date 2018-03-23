@@ -5,7 +5,7 @@ import (
 	"github.com/aunem/transpose/pkg/listener"
 	"github.com/aunem/transpose/pkg/middleware"
 	"github.com/aunem/transpose/pkg/roundtrip"
-	"github.com/aunem/transpose/utils"
+	"github.com/aunem/transpose/pkg/utils"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/spf13/cobra"
@@ -24,6 +24,7 @@ func init() {
 
 // Resolve plugins
 func Resolve(cmd *cobra.Command, args []string) {
+	utils.MakeBins()
 	log.Info("loading config...")
 	c, err := config.LoadConfig("", "local")
 	if err != nil {

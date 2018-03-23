@@ -5,7 +5,7 @@
   branch = "master"
   name = "github.com/aunem/transpose-plugins"
   packages = ["listener/http"]
-  revision = "2cdcf6935b75fb31983087a2d70f9c2ebefd624b"
+  revision = "01e0df2a105767f26d5ebb1812095c0ddb907d49"
 
 [[projects]]
   name = "github.com/davecgh/go-spew"
@@ -230,7 +230,7 @@
     "googleapis/api/annotations",
     "googleapis/rpc/status"
   ]
-  revision = "f8c8703595236ae70fdf8789ecb656ea0bcdcf46"
+  revision = "ab0870e398d5dd054b868c0db1481ab029b9a9f2"
 
 [[projects]]
   name = "google.golang.org/grpc"

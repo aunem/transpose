@@ -8,7 +8,7 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/aunem/transpose/config"
-	"github.com/aunem/transpose/utils"
+	"github.com/aunem/transpose/pkg/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
