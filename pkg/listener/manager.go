@@ -13,7 +13,7 @@ import (
 )
 
 // Dir is the directory that holds the .so Listener files
-const Dir = "./plugins/listener"
+const Dir = "./bin/listener"
 
 // Manager manages Listener
 type Manager struct {

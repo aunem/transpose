@@ -10,7 +10,7 @@ import (
 )
 
 // Dir is the plugin directory
-const Dir = "./plugins/"
+const Dir = "./bin/"
 
 // Type is an enum for a plugin
 type Type string
@@ -24,12 +24,23 @@ const (
 	RoundtripType Type = "roundtrip"
 )
 
-// ExecCommand executes the dep command to resolve the plugin
-func ExecCommand(pkg string) {
-	// docker build current directory
+// AddPkg adds a package using dep
+func AddPkg(pkg string) {
 	cmdName := "dep"
 	cmdArgs := []string{"ensure", "-v", "-add", pkg}
+	ExecCommand(cmdName, cmdArgs)
+}
 
+// Update deps to the latest version
+func Update() {
+	cmdName := "dep"
+	cmdArgs := []string{"ensure", "-v", "-update"}
+	ExecCommand(cmdName, cmdArgs)
+}
+
+// ExecCommand executes the dep command to resolve the plugin
+func ExecCommand(cmdName string, cmdArgs []string) {
+	log.Debug("start exec...")
 	cmd := exec.Command(cmdName, cmdArgs...)
 	log.Debugf("cmd: %+v", cmd)
 	cmdReader, err := cmd.StdoutPipe()
@@ -56,26 +67,25 @@ func ExecCommand(pkg string) {
 	if err != nil {
 		log.Fatal("Error waiting for Cmd: ", err)
 	}
+	log.Debug("end exec...")
 }
 
 // ResolvePlugin pulls a remote plugin local
 func ResolvePlugin(name, pkg string) (path string, err error) {
-	log.Debug("resolving plugin: ", pkg)
-	ExecCommand(pkg)
-	pkgPath := filepath.Join("./vendor", pkg)
-	log.Debugf("package path: %+v", pkgPath)
-	return pkgPath, nil
+	log.Info("resolving plugin: ", pkg)
+	Update()
+	AddPkg(pkg)
+	pkgPath := filepath.Join("vendor", pkg)
+	log.Infof("package path: %+v", pkgPath)
+	return fmt.Sprintf("./%s", pkgPath), nil
 }
 
 // BuildPlugin pulls a remote plugin local
 func BuildPlugin(name, pkgPath string, typ Type) (path string, err error) {
 	log.Debug("building plugin...")
 	soPath := filepath.Join(Dir, string(typ), name, fmt.Sprintf("%s.so", name))
-	cmd := exec.Command("go", "build", "-buildmode=plugin", fmt.Sprintf("-o %s", soPath), pkgPath)
-	log.Debugf("cmd: %+v", cmd)
-	err = cmd.Run()
-	if err != nil {
-		return "", fmt.Errorf("could not build plugin %s: %s", pkgPath, err)
-	}
+	cmdName := "go"
+	cmdArgs := []string{"build", "-buildmode=plugin", fmt.Sprintf("-o %s", soPath), pkgPath}
+	ExecCommand(cmdName, cmdArgs)
 	return soPath, nil
 }
