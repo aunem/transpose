@@ -44,5 +44,5 @@ func Resolve(cmd *cobra.Command, args []string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Info("all plugins resolved, objects can be found in ./plugins folder")
+	log.Info("all plugins resolved, objects can be found in ./bin folder")
 }

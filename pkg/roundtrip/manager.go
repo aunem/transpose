@@ -14,7 +14,7 @@ import (
 )
 
 // Dir is the directory that holds the .so Roundtrip files
-const Dir = "./plugins/roundtrip"
+const Dir = "./bin/roundtrip"
 
 // Manager manages roundtrip
 type Manager struct {

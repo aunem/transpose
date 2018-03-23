@@ -14,7 +14,7 @@ import (
 )
 
 // Dir is the directory that holds the .so middleware files
-const Dir = "./plugins/middleware"
+const Dir = "./bin/middleware"
 
 // Manager manages middleware
 type Manager struct {
