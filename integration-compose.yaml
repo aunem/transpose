@@ -6,27 +6,27 @@ services:
       dockerfile: Dockerfile-integration
     command: go run main.go serve
     links: 
-      - test-client
+      - server
     working_dir: /go/src/github.com/aunem/transpose
     volumes:
       - "./:/go/src/github.com/aunem/transpose"
     expose:
       - "80"
-  test-server:
+  server:
     build:
       context: ./
       dockerfile: Dockerfile-integration
     command: go run integration/server/main.go
-    links: 
-      - transpose
     working_dir: /go/src/github.com/aunem/transpose
     volumes:
       - "./:/go/src/github.com/aunem/transpose"
-  test-client:
+  client:
     build:
       context: ./
       dockerfile: Dockerfile-integration
     command: go run integration/client/main.go
+    links:
+      - transpose
     working_dir: /go/src/github.com/aunem/transpose
     volumes:
       - "./:/go/src/github.com/aunem/transpose"

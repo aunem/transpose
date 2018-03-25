@@ -36,5 +36,5 @@ spec:
       http:
       - path: "/"
         backend:
-          serviceName: myservice
+          serviceName: server
           servicePort: 80
