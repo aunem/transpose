@@ -24,7 +24,7 @@ Metadata:
 spec:
   listener:
     name: myHttplistener
-    package: github.com/oscea/transpose-plugins/listener/http
+    package: github.com/aunem/transpose-plugins/listener/http
     spec: 
       port: 80
       ssl: false
@@ -32,13 +32,13 @@ spec:
   middleware:
     request:
     - name: hydraAuth
-      package: github.com/oscea/transpose-plugins/middleware/hydra
+      package: github.com/aunem/transpose-plugins/middleware/hydra
       spec:
         authUrl: my.auth.com
         clientID: transposeClient
     response:
     - name: hydraAuth
-      package: github.com/oscea/transpose-plugins/middleware/hydra
+      package: github.com/aunem/transpose-plugins/middleware/hydra
       spec:
         authUrl: my.auth.com
         clientID: transposeClient
@@ -46,7 +46,7 @@ spec:
 
   roundtrip:
     name: myroundtrip
-    package: github.com/oscea/transpose-plugins/roundtrip/supermux
+    package: github.com/aunem/transpose-plugins/roundtrip/supermux
     spec:
       http:
       - path: "/"

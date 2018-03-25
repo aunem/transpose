@@ -8,17 +8,21 @@ import (
 	plug "plugin"
 
 	"github.com/aunem/transpose/config"
+	"github.com/aunem/transpose/pkg/middleware"
 	resolve "github.com/aunem/transpose/pkg/resolve"
+	"github.com/aunem/transpose/pkg/roundtrip"
 	log "github.com/sirupsen/logrus"
 )
 
-// Dir is the directory that holds the .so Listener files
-const Dir = "./bin/listener"
+// Bin is the directory that holds the .so Listener files
+const Bin = "./bin/listener"
 
 // Manager manages Listener
 type Manager struct {
-	Listener Listener
-	Spec     config.TransposeSpec
+	Listener   Listener
+	Middleware *middleware.Manager
+	Roundtrip  *roundtrip.Manager
+	Spec       config.TransposeSpec
 }
 
 // Listener holds the plugin and variables to be executed
@@ -29,8 +33,8 @@ type Listener struct {
 }
 
 // NewManager returns a new Listener manager
-func NewManager(spec config.TransposeSpec) (*Manager, error) {
-	files, err := ioutil.ReadDir(Dir)
+func NewManager(spec config.TransposeSpec, mw *middleware.Manager, rt *roundtrip.Manager) (*Manager, error) {
+	files, err := ioutil.ReadDir(Bin)
 	if err != nil {
 		return nil, err
 	}
@@ -38,24 +42,46 @@ func NewManager(spec config.TransposeSpec) (*Manager, error) {
 	m := Manager{
 		Listener: Listener{},
 	}
-	rtp, err := loadListener(files, spec.Listener)
+	log.Debug("loading plugin...")
+	rtp, err := loadListener(files, spec)
+	if err != nil {
+		return nil, err
+	}
+	log.Debug("loading spec...")
+	err = rtp.LoadSpec(spec.Listener.Spec)
 	if err != nil {
 		return nil, err
 	}
 	m.Listener = Listener{Plugin: rtp, Spec: spec}
+	m.Middleware = mw
+	m.Roundtrip = rt
 	m.Spec = spec
 	log.Debugf("manager: %+v", m)
 	return &m, nil
 }
 
-func loadListener(files []os.FileInfo, plugin config.ListenerPlugin) (rtp Plugin, err error) {
+func loadListener(files []os.FileInfo, spec config.TransposeSpec) (rtp Plugin, err error) {
+	plugin := spec.Listener
 	path := soPath(files, plugin)
 	log.Debug(".so file: ", path)
 	if path == "" {
 		log.Debug(".so file not found, resolving plugin...")
-		path, err = resolve.ResolvePlugin(plugin.Name, plugin.Package)
-		if err != nil {
-			return rtp, err
+		if spec.LocalBuild {
+			log.Info("resolving locally")
+			path, err = resolve.ResolveLocal(plugin.Name, plugin.Package)
+			if err != nil {
+				log.Info("could not resolve plugin locally, trying remote...")
+				path, err = resolve.ResolveRemote(plugin.Name, plugin.Package)
+				if err != nil {
+					return rtp, err
+				}
+			}
+		} else {
+			log.Info("resolving remote")
+			path, err = resolve.ResolveRemote(plugin.Name, plugin.Package)
+			if err != nil {
+				return rtp, err
+			}
 		}
 		path, err = resolve.BuildPlugin(plugin.Name, path, resolve.ListenerType)
 		if err != nil {
@@ -84,7 +110,7 @@ func soPath(fl []os.FileInfo, plugin config.ListenerPlugin) (path string) {
 	for _, fileInfo := range fl {
 		if fileInfo.IsDir() {
 			if plugin.Name == fileInfo.Name() {
-				fp := filepath.Join(Dir, fileInfo.Name(), fmt.Sprintf("%s.so", fileInfo.Name()))
+				fp := filepath.Join(Bin, fileInfo.Name(), fmt.Sprintf("%s.so", fileInfo.Name()))
 				if _, err := os.Stat(fp); err == nil {
 					return fp
 				}
@@ -97,6 +123,6 @@ func soPath(fl []os.FileInfo, plugin config.ListenerPlugin) (path string) {
 // ExecListener executes the Listener plugin
 func (m *Manager) ExecListener() error {
 	log.Debugf("executing Listener: %+v", m.Listener)
-	err := m.Listener.Plugin.Listen(m.Spec)
+	err := m.Listener.Plugin.Listen(m.Middleware, m.Roundtrip)
 	return err
 }

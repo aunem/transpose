@@ -40,14 +40,30 @@ func NewManager(spec config.TransposeSpec) (*Manager, error) {
 		ResponseMiddlewares: []Middleware{},
 	}
 	for _, plugin := range spec.Middleware.Request {
-		mw, err := loadMiddleware(files, plugin)
+		mw, err := loadMiddleware(files, plugin, spec)
+		if err != nil {
+			return nil, err
+		}
+		err = mw.Plugin.LoadSpec(plugin.Spec)
+		if err != nil {
+			return nil, err
+		}
+		err = mw.Plugin.Init()
 		if err != nil {
 			return nil, err
 		}
 		m.RequestMiddlewares = append(m.RequestMiddlewares, mw)
 	}
 	for _, plugin := range spec.Middleware.Response {
-		mw, err := loadMiddleware(files, plugin)
+		mw, err := loadMiddleware(files, plugin, spec)
+		if err != nil {
+			return nil, err
+		}
+		err = mw.Plugin.LoadSpec(plugin.Spec)
+		if err != nil {
+			return nil, err
+		}
+		err = mw.Plugin.Init()
 		if err != nil {
 			return nil, err
 		}
@@ -57,12 +73,19 @@ func NewManager(spec config.TransposeSpec) (*Manager, error) {
 	return &m, nil
 }
 
-func loadMiddleware(files []os.FileInfo, plugin config.MiddlewarePlugin) (mw Middleware, err error) {
+func loadMiddleware(files []os.FileInfo, plugin config.MiddlewarePlugin, spec config.TransposeSpec) (mw Middleware, err error) {
 	path := soPath(files, plugin)
 	if path == "" {
-		path, err = resolve.ResolvePlugin(plugin.Name, plugin.Package)
-		if err != nil {
-			return mw, err
+		if spec.LocalBuild {
+			path, err = resolve.ResolveLocal(plugin.Name, plugin.Package)
+			if err != nil {
+				return mw, err
+			}
+		} else {
+			path, err = resolve.ResolveRemote(plugin.Name, plugin.Package)
+			if err != nil {
+				return mw, err
+			}
 		}
 		path, err = resolve.BuildPlugin(plugin.Name, path, resolve.MiddlewareType)
 		if err != nil {
@@ -110,7 +133,7 @@ func (m *Manager) ExecRequestStack(ctx context.Request) (context.Request, error)
 	var err error
 	for _, mw := range m.RequestMiddlewares {
 		log.Debugf("executing middleware: %+v", mw)
-		ctx, err = mw.Plugin.ProcessRequest(ctx, mw.Config)
+		ctx, err = mw.Plugin.ProcessRequest(ctx)
 		if err != nil {
 			return nil, err
 		}
@@ -123,7 +146,7 @@ func (m *Manager) ExecResponseStack(ctx context.Response) (context.Response, err
 	var err error
 	for _, mw := range m.ResponseMiddlewares {
 		log.Debugf("executing middleware: %+v", mw)
-		ctx, err = mw.Plugin.ProcessResponse(ctx, mw.Config)
+		ctx, err = mw.Plugin.ProcessResponse(ctx)
 		if err != nil {
 			return nil, err
 		}

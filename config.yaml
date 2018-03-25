@@ -1,36 +1,37 @@
-apiVersion: alpha.oscea.com/v1
+apiVersion: alpha.aunem.com/v1
 kind: Transpose
 metadata:
   name: myProxy
   namespace: default
 spec:
   debug: true
+  localBuild: false
 
   listener:
     name: mylistener
-    package: github.com/aunem/transpose-plugins/listener/http
+    package: github.com/aunem/transpose-plugins/listener/http@poc
     spec: 
-      port: 80
+      port: 8080
       ssl: false
 
-  middleware:
-    request:
-    - name: myplugin
-      package: github.com/aunem/transpose-plugins/middleware/auth
-      spec:
-        authUrl: my.auth.com
-        clientID: transposeClient
-    response:
-    - name: myplugin
-      package: github.com/oscea/transpose-plugins/middleware/auth
-      spec:
-        authUrl: my.auth.com
-        clientID: transposeClient
-        auditUrl: my.audit.com
+  # middleware:
+  #   request:
+  #   - name: myplugin
+  #     package: github.com/aunem/transpose-plugins/middleware/auth@poc
+  #     spec:
+  #       authUrl: my.auth.com
+  #       clientID: transposeClient
+  #   response:
+  #   - name: myplugin
+  #     package: github.com/oscea/transpose-plugins/middleware/auth@poc
+  #     spec:
+  #       authUrl: my.auth.com
+  #       clientID: transposeClient
+  #       auditUrl: my.audit.com
 
   roundtrip:
     name: myroundtrip
-    package: github.com/aunem/transpose-plugins/roundtrip/supermux
+    package: github.com/aunem/transpose-plugins/roundtrip/supermux@poc
     spec:
       http:
       - path: "/"

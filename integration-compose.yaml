@@ -4,7 +4,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile-integration
-    command: go run main.go
+    command: go run main.go serve
     links: 
       - test-client
     working_dir: /go/src/github.com/aunem/transpose

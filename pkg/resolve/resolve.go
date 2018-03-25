@@ -3,9 +3,12 @@ package plugin
 import (
 	"bufio"
 	"fmt"
+	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 
+	"github.com/aunem/transpose/pkg/utils"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -68,14 +71,30 @@ func ExecCommand(cmdName string, cmdArgs []string) {
 	}
 }
 
-// ResolvePlugin pulls a remote plugin local
-func ResolvePlugin(name, pkg string) (path string, err error) {
+// ResolveRemote pulls a remote plugin local
+func ResolveRemote(name, pkg string) (path string, err error) {
 	log.Info("resolving plugin: ", pkg)
+	err = utils.CleanConstraints() // HACK: this needs to be fixed in golang/dep
+	if err != nil {
+		return "", err
+	}
 	Update()
 	AddPkg(pkg)
-	pkgPath := filepath.Join("vendor", pkg)
+	pkgClean := strings.Split(pkg, "@")[0]
+	pkgPath := filepath.Join("vendor", pkgClean)
 	log.Infof("package path: %+v", pkgPath)
 	return fmt.Sprintf("./%s", pkgPath), nil
+}
+
+// ResolveLocal pulls a remote plugin local
+func ResolveLocal(name, pkg string) (path string, err error) {
+	gp := os.Getenv("GOPATH")
+	if gp == "" {
+		return "", fmt.Errorf("gopath not set")
+	}
+	pkgPath := filepath.Join("../../../", pkg)
+	log.Infof("package path: %+v", pkgPath)
+	return pkgPath, nil
 }
 
 // BuildPlugin pulls a remote plugin local
@@ -83,6 +102,7 @@ func BuildPlugin(name, pkgPath string, typ Type) (path string, err error) {
 	log.Debug("building plugin...")
 	soPath := filepath.Join(Dir, string(typ), name, fmt.Sprintf("%s.so", name))
 	cmdName := "go"
+	log.Debug("plugin path: ", soPath)
 	cmdArgs := []string{"build", "-buildmode=plugin", "-o", soPath, pkgPath}
 	ExecCommand(cmdName, cmdArgs)
 	return soPath, nil

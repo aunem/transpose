@@ -14,8 +14,7 @@ type Transpose struct {
 // TransposeSpec holds the specification for the proxy
 type TransposeSpec struct {
 	Debug      bool              `json:"debug" yaml:"debug"`
-	SSL        bool              `json:"ssl" yaml:"ssl"`
-	Port       string            `json:"port" yaml:"port"`
+	LocalBuild bool              `json:"localBuild" yaml:"localBuild"`
 	Listener   ListenerPlugin    `json:"listener" yaml:"listener"`
 	Middleware MiddlewarePlugins `json:"middleware" yaml:"middleware"`
 	Roundtrip  RoundtripPlugin   `json:"roundtrip" yaml:"roundtrip"`

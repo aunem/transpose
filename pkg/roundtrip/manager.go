@@ -37,7 +37,18 @@ func NewManager(spec config.TransposeSpec) (*Manager, error) {
 	m := Manager{
 		Roundtrip: Roundtrip{},
 	}
-	rtp, err := loadRoundtrip(files, spec.Roundtrip)
+	log.Debug("loading plugin...")
+	rtp, err := loadRoundtrip(files, spec)
+	if err != nil {
+		return nil, err
+	}
+	log.Debug("loading spec...")
+	err = rtp.LoadSpec(spec.Roundtrip.Spec)
+	if err != nil {
+		return nil, err
+	}
+	log.Debug("running init...")
+	err = rtp.Init()
 	if err != nil {
 		return nil, err
 	}
@@ -46,12 +57,20 @@ func NewManager(spec config.TransposeSpec) (*Manager, error) {
 	return &m, nil
 }
 
-func loadRoundtrip(files []os.FileInfo, plugin config.RoundtripPlugin) (rtp Plugin, err error) {
+func loadRoundtrip(files []os.FileInfo, spec config.TransposeSpec) (rtp Plugin, err error) {
+	plugin := spec.Roundtrip
 	path := soPath(files, plugin)
 	if path == "" {
-		path, err = resolve.ResolvePlugin(plugin.Name, plugin.Package)
-		if err != nil {
-			return rtp, err
+		if spec.LocalBuild {
+			path, err = resolve.ResolveLocal(plugin.Name, plugin.Package)
+			if err != nil {
+				return rtp, err
+			}
+		} else {
+			path, err = resolve.ResolveRemote(plugin.Name, plugin.Package)
+			if err != nil {
+				return rtp, err
+			}
 		}
 		path, err = resolve.BuildPlugin(plugin.Name, path, resolve.RoundtripType)
 		if err != nil {
@@ -62,11 +81,12 @@ func loadRoundtrip(files []os.FileInfo, plugin config.RoundtripPlugin) (rtp Plug
 	if err != nil {
 		return rtp, err
 	}
+	log.Debug("loading plugin: ", path)
 	symPlugin, err := p.Lookup("RoundtripPlugin")
 	if err != nil {
 		return rtp, err
 	}
-
+	log.Debugf("sym plugin: %+v", symPlugin)
 	var ok bool
 	rtp, ok = symPlugin.(Plugin)
 	if !ok {
@@ -93,7 +113,7 @@ func soPath(fl []os.FileInfo, plugin config.RoundtripPlugin) (path string) {
 func (m *Manager) ExecRoundtrip(ctx context.Request) (context.Response, error) {
 	var err error
 	log.Debugf("executing roundtrip: %+v", m.Roundtrip)
-	respCtx, err := m.Roundtrip.Plugin.Roundtrip(ctx, m.Roundtrip.Config)
+	respCtx, err := m.Roundtrip.Plugin.Roundtrip(ctx)
 	if err != nil {
 		return nil, err
 	}

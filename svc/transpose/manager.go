@@ -1,5 +1,5 @@
-package cluster
+package transpose
 
-// Manager interfaces the persistence of clusters
+// Manager interfaces the persistence
 type Manager interface {
 }
