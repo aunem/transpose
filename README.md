@@ -57,6 +57,24 @@ spec:
 
 see [start.md](docs/start.md) for more details
 
+## Plugins
+
+### Listener
+Plugin | Description | Build | Contexts Supported
+--- | --- | --- | ---
+ [http](github.com/aunem/transpose-plugins/tree/master/listener/http)| simple http listener | build data | http
+
+### Middleware
+Plugin | Description | Build | Contexts Supported
+--- | --- | --- | ---
+
+### Roundtrip
+Plugin | Description | Build | Contexts Supported
+--- | --- | --- | ---
+ [supermux](github.com/aunem/transpose-plugins/tree/master/roundtrip/supermux)| an enhanced router | build data | http, grpc
+
+To develop plugins see [developing_plugins.md](docs/developing_plugins.md)
+
 ## Inspiration
 
 * Envoy [github.com/envoyproxy/envoy](github.com/envoyproxy/envoy)
@@ -64,11 +82,6 @@ see [start.md](docs/start.md) for more details
 * Gentleman [github.com/h2non/gentleman](github.com/h2non/gentleman)
 * Istio [github.com/istio/istio](github.com/istio/istio)
 * OpenFaas [github.com/openfaas/faas](github.com/openfaas/faas)
-
-## Libs
-
-* Oxy [github.com/vulcand/oxy](github.com/vulcand/oxy)
-* Gorrilla Mux [github.com/gorilla/mux](github.com/gorilla/mux)
 
 ## Roadmap
 

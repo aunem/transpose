@@ -11,6 +11,7 @@ import (
 type HTTPRequest struct {
 	ID      string
 	Request *http.Request
+	RW      http.ResponseWriter
 }
 
 // HTTPResponse is passed to a plugins response method
@@ -18,6 +19,7 @@ type HTTPResponse struct {
 	ID       string
 	Request  *http.Request
 	Response *http.Response
+	RW       http.ResponseWriter
 }
 
 // NewHTTPRequest returns a new request context
