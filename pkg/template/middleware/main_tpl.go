@@ -29,7 +29,7 @@ func (p *{{ .Name }}Plugin) ProcessResponse(resp context.Response) (context.Resp
 	return nil, nil
 }
 
-func (p *{{ .Name }}Plugin) LoadSpec(spec interface{}) error {
+func (p *{{ .Name }}Plugin) Init(spec interface{}) error {
 	b, err := yaml.Marshal(spec)
 	if err != nil {
 		return err
@@ -39,10 +39,6 @@ func (p *{{ .Name }}Plugin) LoadSpec(spec interface{}) error {
 		return err
 	}
 	log.Debugf("loaded spec: %+v", Spec)
-	return nil
-}
-
-func (p *{{ .Name }}Plugin) Init() error {
 	return nil
 }
 

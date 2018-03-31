@@ -9,8 +9,8 @@ import (
 type Plugin interface {
 	// Listen
 	Listen(mw *middleware.Manager, rt *roundtrip.Manager) error
-	// LoadSpec loads the spec on initialization and config updates
-	LoadSpec(spec interface{}) error
+	// Init is called on initialization and config updates
+	Init(spec interface{}) error
 	// Stats can return arbitrary json stats
 	Stats() ([]byte, error)
 }

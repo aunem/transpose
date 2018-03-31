@@ -44,11 +44,7 @@ func NewManager(spec config.TransposeSpec) (*Manager, error) {
 		if err != nil {
 			return nil, err
 		}
-		err = mw.Plugin.LoadSpec(plugin.Spec)
-		if err != nil {
-			return nil, err
-		}
-		err = mw.Plugin.Init()
+		err = mw.Plugin.Init(plugin.Spec)
 		if err != nil {
 			return nil, err
 		}
@@ -59,11 +55,7 @@ func NewManager(spec config.TransposeSpec) (*Manager, error) {
 		if err != nil {
 			return nil, err
 		}
-		err = mw.Plugin.LoadSpec(plugin.Spec)
-		if err != nil {
-			return nil, err
-		}
-		err = mw.Plugin.Init()
+		err = mw.Plugin.Init(plugin.Spec)
 		if err != nil {
 			return nil, err
 		}
