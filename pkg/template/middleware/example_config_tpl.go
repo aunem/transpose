@@ -1,10 +1,6 @@
-# {{ .Name }}
+package middleware
 
-// Your overview here
-
-## Spec
-```yaml
-apiVersion: alpha.aunem.com/v1
+var exampleTpl = `apiVersion: alpha.aunem.com/v1
 Kind: Transpose
 Metadata:
   name: myProxy
@@ -16,6 +12,12 @@ spec:
     spec: 
       port: 80
       ssl: false
+    
+  middleware:
+    name: {{ .Name }}
+    package: {{ .Pkg }}
+    spec:
+      my: spec
 
   roundtrip:
     name: myroundtrip
@@ -26,10 +28,4 @@ spec:
         backend:
           serviceName: myservice
           servicePort: 80
-```
-
-## Contexts Supported
-* Http
-
-## Test
-`go test ./...`
+`

@@ -24,14 +24,14 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
 	rootCmd.PersistentFlags().StringVar(&name, "config-name", "", "name of the kubernetes config to sync to")
 	rootCmd.PersistentFlags().StringVar(&namespace, "config-namespace", "local", "namespace of the kubernetes config to sync to, use 'local' for a local config, leave blank for current ns")
 	viper.BindPFlag("config-name", rootCmd.PersistentFlags().Lookup("config-name"))
 	viper.BindPFlag("config-namespace", rootCmd.PersistentFlags().Lookup("config-namespace"))
 }
 
-func initConfig() {
+// InitConfig initializes the config
+func InitConfig() {
 	r := strings.NewReplacer("_", "-")
 	viper.SetEnvKeyReplacer(r)
 	viper.AutomaticEnv()

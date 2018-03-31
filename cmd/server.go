@@ -23,6 +23,7 @@ var serverCmd = &cobra.Command{
 
 // Serve starts a new transpose server
 func Serve(cmd *cobra.Command, args []string) {
+	InitConfig()
 	log.Info("finding or creating bins...")
 	utils.MakeBins()
 	log.Info("resolving middleware plugin...")

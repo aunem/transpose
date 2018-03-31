@@ -27,6 +27,13 @@ const (
 	RoundtripType Type = "roundtrip"
 )
 
+// Init adds a package using dep
+func Init() {
+	cmdName := "dep"
+	cmdArgs := []string{"init"}
+	ExecCommand(cmdName, cmdArgs)
+}
+
 // AddPkg adds a package using dep
 func AddPkg(pkg string) {
 	cmdName := "dep"
