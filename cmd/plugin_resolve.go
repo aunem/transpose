@@ -16,7 +16,7 @@ import (
 var localBuild bool
 var build bool
 
-var reolveCmd = &cobra.Command{
+var resolveCmd = &cobra.Command{
 	Use:   "resolve",
 	Short: "resolve plugins",
 	Long:  utils.GetArt(),
@@ -24,9 +24,9 @@ var reolveCmd = &cobra.Command{
 }
 
 func init() {
-	pluginCmd.AddCommand(reolveCmd)
-	initCmd.Flags().BoolVarP(&localBuild, "local", "l", false, "build plugin from local gopath")
-	initCmd.Flags().BoolVarP(&build, "build", "b", false, "resolve all plugins anew")
+	pluginCmd.AddCommand(resolveCmd)
+	resolveCmd.Flags().BoolVarP(&localBuild, "local", "l", false, "build plugin from local gopath")
+	resolveCmd.Flags().BoolVarP(&build, "build", "b", false, "resolve all plugins anew")
 }
 
 // Resolve plugins

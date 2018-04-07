@@ -1,4 +1,4 @@
-package middleware
+package roundtrip
 
 var exampleTpl = `apiVersion: alpha.aunem.io/v1
 Kind: Transpose
@@ -12,17 +12,10 @@ spec:
     spec: 
       port: 80
       ssl: false
-    
-  middleware:
-    name: {{ .Name }}
-    package: {{ .Pkg }}
-    # Add your spec data here
-    spec:
-      my: spec
 
   roundtrip:
-    name: myroundtrip
-    package: github.com/aunem/transpose-plugins/roundtrip/supermux
+    name: {{ .Name }}
+    package: {{ .Pkg }}
     spec:
       http:
       - path: "/"

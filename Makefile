@@ -1,18 +1,28 @@
 
 .PHONY: deps
 deps:
+	go get -u github.com/golang/dep/cmd/dep
 	docker-compose run --rm deps
 
 .PHONY: build
-	docker-compose run -rm build
+build:
+	docker-compose run --rm build
+
+.PHONY: plugins
+plugins:
+	docker-compose run --rm plugins
 
 .PHONY: integration
-integration:
-	docker-compose -f integration-compose.yaml up
+integration: plugins
+	docker-compose run --rm integration
 
 .PHONY: integration-down
 integration-down:
-	docker-compose -f integration-compose.yaml down
+	docker-compose down
+
+.PHONY: clean
+clean:
+	go run main.go plugin clean
 
 .PHONY: proto-gateway
 proto-gateway: 

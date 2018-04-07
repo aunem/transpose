@@ -1,4 +1,4 @@
-package middleware
+package listener
 
 var exampleTpl = `apiVersion: alpha.aunem.io/v1
 Kind: Transpose
@@ -7,18 +7,11 @@ Metadata:
   namespace: default
 spec:
   listener:
-    name: mylistener
-    package: github.com/aunem/transpose-plugins/listener/http
+    name: {{ .Name }}
+    package: {{ .Repo }}
     spec: 
       port: 80
       ssl: false
-    
-  middleware:
-    name: {{ .Name }}
-    package: {{ .Pkg }}
-    # Add your spec data here
-    spec:
-      my: spec
 
   roundtrip:
     name: myroundtrip

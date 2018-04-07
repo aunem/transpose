@@ -5,8 +5,12 @@ import (
 	"os"
 	tpl "text/template"
 
+	list "github.com/aunem/transpose/pkg/template/listener"
 	mw "github.com/aunem/transpose/pkg/template/middleware"
+	rt "github.com/aunem/transpose/pkg/template/roundtrip"
 )
+
+//TODO: test this
 
 // TemplateDir represents a templated directory
 type TemplateDir string
@@ -49,9 +53,37 @@ func (p *Plugin) Template() error {
 			}
 		}
 	case "listener":
-
+		for k, v := range list.Manifest {
+			t, err := tpl.New("tpl").Parse(v)
+			if err != nil {
+				return err
+			}
+			f, err := os.Create(k)
+			if err != nil {
+				return err
+			}
+			defer f.Close()
+			t.Execute(f, p)
+			if err != nil {
+				return err
+			}
+		}
 	case "roundtrip":
-
+		for k, v := range rt.Manifest {
+			t, err := tpl.New("tpl").Parse(v)
+			if err != nil {
+				return err
+			}
+			f, err := os.Create(k)
+			if err != nil {
+				return err
+			}
+			defer f.Close()
+			t.Execute(f, p)
+			if err != nil {
+				return err
+			}
+		}
 	default:
 		return fmt.Errorf("plugin typ uknown: %+v", p.Typ)
 	}

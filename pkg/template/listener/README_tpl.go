@@ -1,4 +1,4 @@
-package middleware
+package listener
 
 var readmeTpl = `
 
@@ -15,17 +15,11 @@ Metadata:
   namespace: default
 spec:
   listener:
-    name: mylistener
-    package: github.com/aunem/transpose-plugins/listener/http
-    spec:
-      port: 80
-      ssl: false
-
-  middleware:
     name: {{ .Name }}
     package: {{ .Pkg }}
-    spec:
-      my: spec
+    spec: 
+      port: 80
+      ssl: false
 
   roundtrip:
     name: myroundtrip

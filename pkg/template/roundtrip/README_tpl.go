@@ -1,4 +1,4 @@
-package middleware
+package roundtrip
 
 var readmeTpl = `
 
@@ -17,19 +17,13 @@ spec:
   listener:
     name: mylistener
     package: github.com/aunem/transpose-plugins/listener/http
-    spec:
+    spec: 
       port: 80
       ssl: false
 
-  middleware:
+  roundtrip:
     name: {{ .Name }}
     package: {{ .Pkg }}
-    spec:
-      my: spec
-
-  roundtrip:
-    name: myroundtrip
-    package: github.com/aunem/transpose-plugins/roundtrip/supermux
     spec:
       http:
       - path: "/"
