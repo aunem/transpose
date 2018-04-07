@@ -1,3 +1,5 @@
+![logo](docs/img/Gopher_logo.png)
+
 # Transpose
 
 Transpose is a cloud native composable proxy with a focus on kubernetes written in go.
@@ -100,4 +102,7 @@ To develop plugins see [developing_plugins.md](docs/developing_plugins.md)
 
 Development happens out of the [Makefile](./Makefile). The targets are fairly simple but if you have any issues contact us.
 
-## Contact
+## Contact and Questions
+
+Chat with us on discord:   
+https://discord.gg/q9mnWtd

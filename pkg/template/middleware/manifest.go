@@ -1,6 +1,6 @@
 package middleware
 
-// Manifest represents the variables to inclued in the templating
+// Manifest is a map of file name to template string
 var Manifest = map[string]string{
 	"main.go":             mainTpl,
 	"main_test.go":        mainTestTpl,

@@ -16,6 +16,7 @@ spec:
   middleware:
     name: {{ .Name }}
     package: {{ .Pkg }}
+    # Add your spec data here
     spec:
       my: spec
 
