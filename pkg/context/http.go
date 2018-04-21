@@ -10,14 +10,18 @@ import (
 // HTTPRequest is passed to a plugins request method
 type HTTPRequest struct {
 	ID      string
+	Meta    map[string]string
 	Request *http.Request
+	RW      http.ResponseWriter
 }
 
 // HTTPResponse is passed to a plugins response method
 type HTTPResponse struct {
 	ID       string
+	Meta     map[string]string
 	Request  *http.Request
 	Response *http.Response
+	RW       http.ResponseWriter
 }
 
 // NewHTTPRequest returns a new request context
@@ -32,6 +36,11 @@ func NewHTTPRequest(req *http.Request) *HTTPRequest {
 // GetID returns the ID
 func (req *HTTPRequest) GetID() string {
 	return req.ID
+}
+
+// GetMeta returns the request metadata
+func (req *HTTPRequest) GetMeta() map[string]string {
+	return req.Meta
 }
 
 // GetRequest returns the request
@@ -51,6 +60,11 @@ func NewHTTPResponse(req *HTTPRequest, resp *http.Response) *HTTPResponse {
 // GetID returns the ID
 func (resp *HTTPResponse) GetID() string {
 	return resp.ID
+}
+
+// GetMeta returns the response metadata
+func (resp *HTTPResponse) GetMeta() map[string]string {
+	return resp.Meta
 }
 
 // GetRequest returns the request

@@ -8,10 +8,8 @@ type Plugin interface {
 	ProcessRequest(req context.Request) (context.Request, error)
 	// ProcessResponse will be called on incoming responses
 	ProcessResponse(resp context.Response) (context.Response, error)
-	// Init is ran once on plugin initialization
-	Init() error
-	// LoadSpec loads the spec on initialization and config updates
-	LoadSpec(spec interface{}) error
+	// Init is called on initialization and config updates
+	Init(spec interface{}) error
 	// Stats can return arbitrary json stats
 	Stats() (error, []byte)
 }

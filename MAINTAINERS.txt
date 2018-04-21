@@ -1,1 +1,2 @@
-Patrick Barker -- grillz
+<name> | <handle> | <email>
+Patrick Barker | @grillz | patrickbarkerco@gmail.com

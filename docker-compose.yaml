@@ -1,5 +1,6 @@
 version: '3'
 services:
+  # resolve deps
   deps:
     build:
       context: ./
@@ -8,6 +9,8 @@ services:
       - "./:/go/src/github.com/aunem/transpose"
     command: dep ensure
     working_dir: /go/src/github.com/aunem/transpose
+  
+  # build binary
   build:
     build:
       context: ./
@@ -16,3 +19,71 @@ services:
       - "./:/go/src/github.com/aunem/transpose"
     command: go build .
     working_dir: /go/src/github.com/aunem/transpose
+  
+  # resolve plugins
+  plugins:
+    build:
+      context: ./
+      dockerfile: Dockerfile-integration
+    volumes:
+      - "./:/go/src/github.com/aunem/transpose"
+    command: go run main.go plugin resolve --build
+    working_dir: /go/src/github.com/aunem/transpose
+  
+  # transpose server
+  transpose:
+    build:
+      context: ./
+      dockerfile: Dockerfile-integration
+    command: go run main.go serve
+    links: 
+      - server
+    working_dir: /go/src/github.com/aunem/transpose
+    volumes:
+      - "./:/go/src/github.com/aunem/transpose"
+    expose:
+      - "80"
+
+  # test server
+  server:
+    build:
+      context: ./
+      dockerfile: Dockerfile-integration
+    command: go run integration/server/main.go
+    working_dir: /go/src/github.com/aunem/transpose
+    volumes:
+      - "./:/go/src/github.com/aunem/transpose"
+  
+  # integration tests
+  integration:
+    build:
+      context: ./
+      dockerfile: Dockerfile-integration
+    command: go run integration/test/main.go
+    depends_on:
+      - transpose
+      - server
+    links:
+      - transpose
+    working_dir: /go/src/github.com/aunem/transpose
+    volumes:
+      - "./:/go/src/github.com/aunem/transpose"
+
+# # hydra auth middleware
+# hydra:
+#   image: oryd/hydra
+#   volumes:
+#     - hydravolume:/root
+#   ports:
+#     - "4444:4444"
+#     - "4445:4445"
+#   command:
+#     host --dangerous-auto-logon --dangerous-force-http --disable-telemetry
+#   environment:
+#     - LOG_LEVEL=debug
+#     - ISSUER=http://localhost:4444
+#     - CONSENT_URL=http://localhost:3000/consent
+#     - DATABASE_URL=memory
+#     - FORCE_ROOT_CLIENT_CREDENTIALS=admin:password
+#     - SYSTEM_SECRET=youReallyNeedToChangeThis
+#   restart: unless-stopped

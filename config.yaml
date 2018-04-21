@@ -8,7 +8,7 @@ spec:
   localBuild: false
 
   listener:
-    name: mylistener
+    name: httplistener
     package: github.com/aunem/transpose-plugins/listener/http@poc
     spec: 
       port: 8080
@@ -16,21 +16,34 @@ spec:
 
   # middleware:
   #   request:
-  #   - name: myplugin
-  #     package: github.com/aunem/transpose-plugins/middleware/auth@poc
+  #   - name: hydraAuth
+  #     package: github.com/aunem/transpose-plugins/middleware/hydra@poc
   #     spec:
-  #       authUrl: my.auth.com
-  #       clientID: transposeClient
+  #       endpoint: http://localhost:4444
+  #       clientID: admin
+  #       clientSecret: password
+  #       scopes:
+  #         - hydra
+  #         - core
+  #       resourceMap:
+  #         - http:
+  #             method: POST
+  #             path: "/"
+  #           action: create
+  #           resource: "rn:myserver:root"
   #   response:
-  #   - name: myplugin
-  #     package: github.com/oscea/transpose-plugins/middleware/auth@poc
+  #   - name: hydraAuth
+  #     package: github.com/aunem/transpose-plugins/middleware/hydra@poc
   #     spec:
-  #       authUrl: my.auth.com
-  #       clientID: transposeClient
-  #       auditUrl: my.audit.com
+  #       endpoint: http://localhost:4444
+  #       clientID: admin
+  #       clientSecret: password
+  #       scopes:
+  #         - hydra
+  #         - core
 
   roundtrip:
-    name: myroundtrip
+    name: muxRoundtrip
     package: github.com/aunem/transpose-plugins/roundtrip/supermux@poc
     spec:
       http:

@@ -42,13 +42,8 @@ func NewManager(spec config.TransposeSpec) (*Manager, error) {
 	if err != nil {
 		return nil, err
 	}
-	log.Debug("loading spec...")
-	err = rtp.LoadSpec(spec.Roundtrip.Spec)
-	if err != nil {
-		return nil, err
-	}
-	log.Debug("running init...")
-	err = rtp.Init()
+	log.Debug("running init function...")
+	err = rtp.Init(spec.Roundtrip.Spec)
 	if err != nil {
 		return nil, err
 	}

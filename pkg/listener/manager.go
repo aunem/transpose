@@ -47,8 +47,8 @@ func NewManager(spec config.TransposeSpec, mw *middleware.Manager, rt *roundtrip
 	if err != nil {
 		return nil, err
 	}
-	log.Debug("loading spec...")
-	err = rtp.LoadSpec(spec.Listener.Spec)
+	log.Debug("running init function...")
+	err = rtp.Init(spec.Listener.Spec)
 	if err != nil {
 		return nil, err
 	}
